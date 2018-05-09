@@ -32,10 +32,10 @@ import requests
 # Path to minecraft server main directory
 MINECRAFT_PATH = '<insert path here>'
 
-# Discord webhook string ('https://discordapp.com/api/webhooks/{webhook.id}/{webhook.token}')
+# Discord webhook URL ('https://discordapp.com/api/webhooks/{webhook.id}/{webhook.token}')
 # See https://discordapp.com/developers/docs/resources/webhook
 # and https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks
-WEBHOOK_STR = '<insert webhook string here>'
+WEBHOOK_URL = '<insert webhook URL here>'
 
 # Message templates
 MSG_LAUNCH = 'Hello, I keep you informed of user activity on the Minecraft server.'
@@ -52,7 +52,7 @@ players_previous = dict()
 
 # Function to post content string to discord
 def post_discord(content):
-    r = requests.post(WEBHOOK_STR, json={'content': content})
+    r = requests.post(WEBHOOK_URL, json={'content': content})
     print(content)
 
 # Main program
