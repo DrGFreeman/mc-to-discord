@@ -26,6 +26,7 @@
 # A simple script that monitors the logs of a Minecraft server and posts user
 # activity (joining & leaving server) to Discord via webhook.
 
+import datetime
 import time
 import requests
 
@@ -40,8 +41,8 @@ WEBHOOK_URL = '<insert webhook URL here>'
 # Message templates
 MSG_LAUNCH = 'Hello, I keep you informed of user activity on the Minecraft server.'
 MSG_SERVER_STOPPED = 'The server is stopped. See you next time.'
-MSG_PLAYER_JOINED = '{player_name} joined the server.'
-MSG_PLAYER_LEFT= '{player_name} left the server.'
+MSG_PLAYER_JOINED = '[{0:%H:%M}] {player_name} joined the server.'
+MSG_PLAYER_LEFT = '[{0:%H:%M}] {player_name} left the server.'
 
 # Path to log file
 LOG_FILE = MINECRAFT_PATH + 'logs/latest.log'
@@ -80,15 +81,16 @@ if __name__ == '__main__':
                             players_current[tokens[3]] = 'out'
 
             # Compare current player status with previous and post changes to discord
+            now = datetime.datetime.now()
             for player, status in players_current.items():
                 if player in players_previous.keys():
                     if players_previous[player] != status:
                         if status == 'in':
-                            post_discord(MSG_PLAYER_JOINED.format(player_name=player))
+                            post_discord(MSG_PLAYER_JOINED.format(now, player_name=player))
                         else:
-                            post_discord(MSG_PLAYER_LEFT.format(player_name=player))
+                            post_discord(MSG_PLAYER_LEFT.format(now, player_name=player))
                 elif status == 'in':
-                    post_discord(MSG_PLAYER_JOINED.format(player_name=player))
+                    post_discord(MSG_PLAYER_JOINED.format(now, player_name=player))
             players_previous = players_current.copy()
 
             time.sleep(5)
